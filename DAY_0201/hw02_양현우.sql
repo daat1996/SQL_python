@@ -18,7 +18,7 @@ where nobel.fullname ='Albert Einstein';
 #3 1910년 부터 2010년 까지 노벨 평화상 수상자 명단 출력(연도 오름차순)
 select `year` , fullname ,birth_country 
 from nobel
-where year between '1910' and '2010'
+where category='Peace' and year between '1910' and '2010'
 order by year asc ;
 
 
@@ -31,20 +31,19 @@ where fullname like 'John%';
 #5 1964년 수상자 중에서 노벨화학상과 의학상을 제외한 수상자의 모든 정보를 수상자 이름 기준으로 오름차순 정렬
 select *
 from nobel
-where year='1964' and not category='Physiology or Medicine'
+where year='1964' and  category not in ('Chemistry','Physiology or Medicine')
 order by fullname ;
 
 #6 2000년부터 2019년까지 노벨문학상 수상자 명단 출력
 select `year` , fullname , gender , birth_country 
 from nobel
-where year between '2000' and '2019';
+where category = 'Literature' and year between '2000' and '2019';
 
 
 #7 각 분야별 역대 수상자의 수를 내림차순으로 정렬 후 출력(group by, order by)
 select category,count(*) as 수상자수
 from nobel
 group by category
-having count(*)
 order by count(*) desc ;
 
 
@@ -53,12 +52,18 @@ select year
 from nobel;
 select year
 from nobel where category ='Physiology or Medicine';
-# 답:
+# 답: 없었던 연도
 select distinct year
 from nobel 
-where year in
+where year not in
 (select year
 from nobel where category ='Physiology or Medicine');
+#있었던 연도
+select distinct year
+from nobel
+where category = 'Physiology or Medicine';
+
+
 
 
 #9 노벨 의학상이 없었던 연도의 총 회수를 출력
@@ -72,7 +77,7 @@ group by nono.numb
 having count(*);
 
 
-
+# 주영님 픽
 select count(distinct year)
 from nobel 
 where year not in
@@ -88,10 +93,10 @@ where gender ='female';
 
 
 #11 수상자들의 출생 국가별 횟수 출력
-select birth_country ,count(*) as 횟수
+select birth_country ,count(birth_country) as 횟수
 from nobel
 group by birth_country 
-having count(*);
+order by count(birth_country);
 
 
 #12 수상자의 출생 국가가 'Korea'인 정보 모두 출력
@@ -100,7 +105,7 @@ from nobel
 where birth_country = 'Korea';
 
 
-#13 수상자의 출신 국가가('Europe','North America', 공백)이 아닌 모든 정보 출력
+#13 수상자의 대륙이 ('Europe','North America', 공백)이 아닌 모든 정보 출력
 select *
 from nobel
 where birth_continent not in ('','Europe','North America');
