@@ -86,3 +86,5 @@ from user_table as ut inner join buy_table as bt
 on ut.userID = bt.userID
 where (ut.addr = '경북') or (ut.addr = '경남')
 order by userID ;
+
+
